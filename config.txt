@@ -1,12 +1,12 @@
 # A-Maze-ing default configuration file
 # Lines starting with # are comments
 
-WIDTH=10
-HEIGHT=10
-ENTRY=0,0
-EXIT=9,9
+WIDTH=3
+HEIGHT=1
+ENTRY=1,0
+EXIT=0,0
 OUTPUT_FILE=maze.txt
-PERFECT=True
+PERFECT=false
 
-# Optional settings:
-SEED=24
+# Optional settings
+SEED=91
