@@ -23,40 +23,27 @@ def get_unvisited_neighbors(maze, x: int, y: int) -> list[tuple[str, int, int]]:
     return unvisited_neighbors
 
 
-def run_dfs_generation(maze, start_x: int = 0, start_y: int = 0) -> None:
-    """
-    Exactly your logic: Generate the maze using a stack (Iterative DFS).
-    This prevents recursion depth issues.
-    """
-    # 1. Bounds check (graceful error handling for 42 subject)
-    if not maze.is_in_bounds(start_x, start_y):
-        raise ValueError("Starting cell is outside maze bounds")
-
-    # 2. Setup starting point
+def run_dfs_generation(maze, start_x: int = 0, start_y: int = 0) -> list[tuple[int, int]]:
+    """Generates maze and returns the history of carved steps for animation."""
     start_cell = maze.get_cell(start_x, start_y)
     start_cell.visited = True
-    
-    # 3. Your Stack-based loop
-    stack: list[tuple[int, int]] = [(start_x, start_y)]
+    stack = [(start_x, start_y)]
+    carve_steps = [(start_x, start_y)] # Track the history
 
     while stack:
         current_x, current_y = stack[-1]
         unvisited = get_unvisited_neighbors(maze, current_x, current_y)
 
         if unvisited:
-            # Pick a random unvisited neighbor
             direction, next_x, next_y = random.choice(unvisited)
-
-            # Carve the passage (removes walls in both cells)
             maze.remove_wall(current_x, current_y, direction)
-             # Move into the neighbor
             next_cell = maze.get_cell(next_x, next_y)
             next_cell.visited = True
             stack.append((next_x, next_y))
+            carve_steps.append((next_x, next_y)) # Record each new step
         else:
-            # No neighbors left: pop from stack to backtrack
             stack.pop()
-
+    return carve_steps # Return this for the friend's animation
 def make_imperfect(maze) -> None:
     """
     Randomly removes extra walls to create loops, 
