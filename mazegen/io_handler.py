@@ -57,17 +57,3 @@ def to_visual_grid(maze, entry: tuple[int, int], exit_: tuple[int, int], path: l
             if not cell.south: grid[vy + 1][vx] = " "
             if not cell.west:  grid[vy][vx - 1] = " "
     return grid
-
-def print_pretty_maze(v_grid: list[list[str]]) -> None:
-    """Prints the maze using block characters and colors."""
-    G, R, B, Y, RST = "\033[92m", "\033[91m", "\033[94m", "\033[93m", "\033[0m"
-    for row in v_grid:
-        line = ""
-        for char in row:
-            if char == "W": line += "█"
-            elif char == "E": line += f"{G}E{RST}"
-            elif char == "X": line += f"{R}X{RST}"
-            elif char == "P": line += f"{B}•{RST}"
-            elif char == "#": line += f"{Y}▒{RST}"
-            else: line += " "
-        print(line)

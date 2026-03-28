@@ -42,8 +42,7 @@ def run_bfs_solver(maze, entry: tuple[int, int], exit_: tuple[int, int]) -> list
                     queue.append((nx, ny))
 
     # 2. Reconstruct the path from Exit back to Entry
-    if exit_ not in came_from:
-        return [] # No path exists (impossible in a perfect maze, but good to check)
+     # No path exists (impossible in a perfect maze, but good to check)
 
     path = []
     current = exit_
