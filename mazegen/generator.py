@@ -22,28 +22,26 @@ def get_unvisited_neighbors(maze, x: int, y: int) -> list[tuple[str, int, int]]:
 
     return unvisited_neighbors
 
-
 def run_dfs_generation(maze, start_x: int = 0, start_y: int = 0) -> list[tuple[int, int]]:
-    """Generates maze and returns the history of carved steps for animation."""
+    # ... (Keep your bounds check) ...
     start_cell = maze.get_cell(start_x, start_y)
     start_cell.visited = True
     stack = [(start_x, start_y)]
-    carve_steps = [(start_x, start_y)] # Track the history
+    history = [(start_x, start_y)] # <--- ADD THIS
 
     while stack:
         current_x, current_y = stack[-1]
         unvisited = get_unvisited_neighbors(maze, current_x, current_y)
-
         if unvisited:
             direction, next_x, next_y = random.choice(unvisited)
             maze.remove_wall(current_x, current_y, direction)
             next_cell = maze.get_cell(next_x, next_y)
             next_cell.visited = True
             stack.append((next_x, next_y))
-            carve_steps.append((next_x, next_y)) # Record each new step
+            history.append((next_x, next_y)) # <--- ADD THIS
         else:
             stack.pop()
-    return carve_steps # Return this for the friend's animation
+    return history # <--- ADD THIS
 def make_imperfect(maze) -> None:
     """
     Randomly removes extra walls to create loops, 
