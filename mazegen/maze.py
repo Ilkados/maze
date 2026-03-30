@@ -43,8 +43,8 @@ class Maze:
         geometry.remove_wall(self, x, y, direction)
 
     def generate(self, start_x: int = 0, start_y: int = 0):
+        """Calls your generator logic and returns the animation history."""
         return generator.run_dfs_generation(self, start_x, start_y)
-
     def make_imperfect(self):
         generator.make_imperfect(self)
         

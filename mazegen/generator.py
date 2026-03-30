@@ -23,25 +23,39 @@ def get_unvisited_neighbors(maze, x: int, y: int) -> list[tuple[str, int, int]]:
     return unvisited_neighbors
 
 def run_dfs_generation(maze, start_x: int = 0, start_y: int = 0) -> list[tuple[int, int]]:
-    # ... (Keep your bounds check) ...
     start_cell = maze.get_cell(start_x, start_y)
     start_cell.visited = True
     stack = [(start_x, start_y)]
-    history = [(start_x, start_y)] # <--- ADD THIS
+    
+    # history stores actual indices of the visual grid (row, col)
+    history = [(start_y * 2 + 1, start_x * 2 + 1)]
 
     while stack:
-        current_x, current_y = stack[-1]
-        unvisited = get_unvisited_neighbors(maze, current_x, current_y)
+        cx, cy = stack[-1]
+        unvisited = get_unvisited_neighbors(maze, cx, cy)
+
         if unvisited:
-            direction, next_x, next_y = random.choice(unvisited)
-            maze.remove_wall(current_x, current_y, direction)
-            next_cell = maze.get_cell(next_x, next_y)
+            direction, nx, ny = random.choice(unvisited)
+            
+            # A. Record the WALL coordinate for animation
+            wall_v_row = (cy + ny) + 1 
+            wall_v_col = (cx + nx) + 1
+            history.append((wall_v_row, wall_v_col))
+            
+            # B. Record the NEXT ROOM coordinate for animation
+            next_v_row = ny * 2 + 1
+            next_v_col = nx * 2 + 1
+            history.append((next_v_row, next_v_col))
+            
+            # C. Physical logic removal
+            maze.remove_wall(cx, cy, direction)
+            
+            next_cell = maze.get_cell(nx, ny)
             next_cell.visited = True
-            stack.append((next_x, next_y))
-            history.append((next_x, next_y)) # <--- ADD THIS
+            stack.append((nx, ny))
         else:
             stack.pop()
-    return history # <--- ADD THIS
+    return history
 def make_imperfect(maze) -> None:
     """
     Randomly removes extra walls to create loops, 
