@@ -42,14 +42,26 @@ def generate_maze(rows, cols, entry, exit_, perfect, seed, logo_cells):
 
 def find_path(grid, entry, exit_):
     if _current_maze is None: return []
+    
+    # 1. Get the logical path from your solver (x, y)
     start_xy = (entry[1] // 2, entry[0] // 2)
     end_xy = (exit_[1] // 2, exit_[0] // 2)
     path_coords, _ = _current_maze.solve(start_xy, end_xy)
     
-    # Convert logical path to visual grid coordinates
+    # 2. Convert to Visual Coordinates (including corridors for a solid line)
     visual_path = []
-    for x, y in path_coords:
-        visual_path.append((y * 2 + 1, x * 2 + 1))
+    for i in range(len(path_coords)):
+        x, y = path_coords[i]
+        # Current Cell Center
+        curr_v = (y * 2 + 1, x * 2 + 1)
+        visual_path.append(curr_v)
+        
+        # If there is a next cell, add the corridor between them
+        if i < len(path_coords) - 1:
+            nx, ny = path_coords[i + 1]
+            corridor_v = ((y * 2 + 1 + ny * 2 + 1) // 2, (x * 2 + 1 + nx * 2 + 1) // 2)
+            visual_path.append(corridor_v)
+            
     return visual_path
 
 def write_maze_file(grid, path, entry, exit_, filename):
