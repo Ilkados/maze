@@ -6,7 +6,7 @@ HEIGHT=30
 ENTRY=0,0
 EXIT=29,29
 OUTPUT_FILE=maze.txt
-PERFECT=true
+PERFECT=false
 
 # Optional settings
 SEED=9

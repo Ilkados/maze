@@ -45,3 +45,49 @@ def run_dfs_generation(maze, start_x: int = 0, start_y: int = 0) -> list[tuple[t
         else:
             stack.pop()
     return history
+def make_imperfect(maze) -> None:
+    """
+    Randomly removes extra internal walls to create loops (imperfect maze).
+    Uses a safety counter and 3x3 validation to remain compliant.
+    """
+    # Target: remove roughly 5% of total potential walls
+    extra_walls = (maze.width * maze.height) // 20
+    count = 0
+    
+    # SAFETY: Prevent infinite loops if the maze is too crowded
+    attempts = 0
+    max_attempts = extra_walls * 20 if extra_walls > 0 else 20
+
+    while count < extra_walls and attempts < max_attempts:
+        attempts += 1
+        
+        # Pick random cell (avoiding the very last row/col to stay inside borders)
+        rx = random.randint(0, maze.width - 2)
+        ry = random.randint(0, maze.height - 2)
+        direction = random.choice(["E", "S"])
+
+        # 1. Identify the neighbor based on direction
+        if direction == "E":
+            nx, ny = rx + 1, ry
+        else:
+            nx, ny = rx, ry + 1
+
+        # 2. RULE: Don't break walls inside or touching the '42' logo
+        if maze.is_pattern_cell(rx, ry) or maze.is_pattern_cell(nx, ny):
+            continue
+            
+        # 3. RULE: Don't break a wall if it's already open
+        cell = maze.get_cell(rx, ry)
+        is_already_open = (direction == "E" and not cell.east) or \
+                          (direction == "S" and not cell.south)
+        if is_already_open:
+            continue
+
+        # 4. RULE: Don't break if it creates a forbidden 3x3 open area
+        from .validator import would_create_forbidden_3x3
+        if would_create_forbidden_3x3(maze, rx, ry, direction):
+            continue
+
+        # If all checks pass, smash the wall!
+        maze.remove_wall(rx, ry, direction)
+        count += 1
