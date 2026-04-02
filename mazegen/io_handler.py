@@ -29,14 +29,17 @@ def to_visual_grid(maze, entry, exit_, path=None) -> list[list[str]]:
             cell = maze.get_cell(x, y)
             vx, vy = x * 2 + 1, y * 2 + 1
 
+            # Inside to_visual_grid in io_handler.py
             if maze.is_pattern_cell(x, y):
-                grid[vy][vx] = "#"
+                grid[vy][vx] = "#"  # Logo is a wall
             elif (x, y) == entry:
                 grid[vy][vx] = 'E'
             elif (x, y) == exit_:
-                grid[vy][vx] = 'X' # <--- CRITICAL: PLACES THE EXIT MARKER
+                grid[vy][vx] = 'X'
+            elif maze.get_cell(x, y).visited:
+                grid[vy][vx] = ' ' # Path
             else:
-                grid[vy][vx] = ' '
+                grid[vy][vx] = 'W' # <--- IMPORTANT: If not visited, it is a WALL!
 
             # Open visual walls based on logic booleans
             if not cell.north: grid[vy - 1][vx] = ' '

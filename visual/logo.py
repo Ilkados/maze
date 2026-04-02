@@ -39,43 +39,35 @@ def logo_fits(rows: int, cols: int) -> bool:
     )
 
 
+from mazegen.constants import PATTERN_42, LOGO_WIDTH, LOGO_HEIGHT
+
 def get_logo_cells(rows: int, cols: int) -> set[tuple[int, int]]:
-    """Compute the set of maze cells that form the '42' logo pattern.
-
-    The logo is centred inside the maze. Each digit is drawn at scale
-    _LOGO_S (2x zoom) so that cells are clearly visible.
-
-    Args:
-        rows: Number of rows in the maze grid.
-        cols: Number of columns in the maze grid.
-
-    Returns:
-        A set of (row, col) positions to keep as walls for the logo.
-        Returns an empty set when the logo does not fit.
     """
-    if not logo_fits(rows, cols):
+    This version maps your LOGICAL PATTERN_42 to the VISUAL grid.
+    It uses Scale 1 to ensure the DFS can move around it.
+    """
+    # 1. Calculate logic size
+    logic_w = cols // 2
+    logic_h = rows // 2
+    
+    if logic_w < LOGO_WIDTH or logic_h < LOGO_HEIGHT:
         return set()
 
-    s = _LOGO_S
-    w4 = _LOGO_W4 * s
-    w2 = _LOGO_W2 * s
-    gap = _LOGO_GAP * s
-    sh = _LOGO_H * s
-    orig_r = (rows - sh) // 2
-    orig_c = (cols - (w4 + gap + w2)) // 2
+    # 2. Calculate the same centering offset used in your Maze.py
+    start_x = (logic_w - LOGO_WIDTH) // 2
+    start_y = (logic_h - LOGO_HEIGHT) // 2
 
-    logo: set[tuple[int, int]] = set()
-    for grid, fw, col_off in [
-        (_DIGIT_4, _LOGO_W4, 0),
-        (_DIGIT_2, _LOGO_W2, w4 + gap),
-    ]:
-        for pr in range(_LOGO_H):
-            for pc in range(fw):
-                if grid[pr][pc] == 1:
-                    for sr in range(s):
-                        for sc in range(s):
-                            r = orig_r + pr * s + sr
-                            c = orig_c + col_off + pc * s + sc
-                            if 1 <= r < rows - 1 and 1 <= c < cols - 1:
-                                logo.add((r, c))
-    return logo
+    visual_logo: set[tuple[int, int]] = set()
+
+    # 3. Map your PATTERN_42 (logical) to Visual Coordinates (row, col)
+    for lx, ly in PATTERN_42:
+        real_x = start_x + lx
+        real_y = start_y + ly
+        
+        # Convert Logical (x, y) to Visual (row, col)
+        # Visual = logic * 2 + 1
+        v_row = real_y * 2 + 1
+        v_col = real_x * 2 + 1
+        visual_logo.add((v_row, v_col))
+        
+    return visual_logo

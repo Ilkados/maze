@@ -27,15 +27,6 @@ class Maze:
     def is_pattern_cell(self, x: int, y: int) -> bool:
         return (x, y) in self.pattern_cells
 
-    def place_42_pattern(self) -> None:
-        self.pattern_cells.clear()
-        if self.width < LOGO_WIDTH or self.height < LOGO_HEIGHT:
-            return
-        start_x = (self.width - LOGO_WIDTH) // 2
-        start_y = (self.height - LOGO_HEIGHT) // 2
-        for lx, ly in PATTERN_42:
-            self.pattern_cells.add((start_x + lx, start_y + ly))
-
     def get_neighbors(self, x: int, y: int):
         return geometry.get_neighbors(self, x, y)
 

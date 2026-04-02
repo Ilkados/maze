@@ -6,11 +6,6 @@ BORDER: str = "  "
 
 # Change these numbers to change the colors:
 # 46 = Green, 196 = Red, 21 = Blue, 226 = Yellow, 232 = Black
-C_ENTRY = "\033[48;5;46m  " + RESET   # ENTRY COLOR
-C_EXIT  = "\033[48;5;196m  " + RESET  # EXIT COLOR
-C_PATH  = "\033[48;5;21m  " + RESET   # SOLID PATH COLOR
-C_LOGO  = "\033[48;5;226m  " + RESET  # 42 LOGO COLOR
-C_VOID  = "\033[48;5;232m  " + RESET  # EMPTY SPACE (Black)
 WALL_COLORS: list[tuple[str, str, str, str]] = [
     ("\033[48;5;22m",  "\033[48;5;121m",  "Green",  "Light Green"),
     ("\033[48;5;37m",  "\033[48;5;159m",  "Cyan",   "Light Cyan"),
@@ -48,7 +43,8 @@ def get_entry() -> str:
     Returns:
         A two-character string with background color for entry rendering.
     """
-    return get_trace()
+    
+    return WALL_COLORS[current_color_index][1] + "  " + RESET
 
 
 def get_exit() -> str:
