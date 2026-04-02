@@ -4,7 +4,6 @@ import sys
 import signal
 import random
 from typing import Optional
-
 from visual.config import load_config
 from visual.colors import rotate_wall_color
 from visual.logo import (

@@ -4,54 +4,46 @@ mazegen/solver.py: Logic for finding the shortest path using BFS.
 from collections import deque
 
 def run_bfs_solver(maze, entry: tuple[int, int], exit_: tuple[int, int]) -> list[tuple[int, int]]:
-    """
-    Finds the shortest path from Entry to Exit.
-    Returns a list of coordinates [(x1,y1), (x2,y2)...]
-    """
-    # 1. Setup the Search
+    # Safety: If entry or exit are logo cells, no path is possible
+    if maze.is_pattern_cell(*entry) or maze.is_pattern_cell(*exit_):
+        print("[DEBUG] Entry or Exit is inside the 42 logo!")
+        return []
+
     queue = deque([entry])
     visited = {entry}
-    # This dictionary is our 'Breadcrumb' trail
     came_from = {entry: None}
 
     while queue:
         cx, cy = queue.popleft()
-
-        # If we hit the target, we stop immediately!
         if (cx, cy) == exit_:
             break
 
         current_cell = maze.get_cell(cx, cy)
-        
-        # We check all 4 neighbors
-        # But we only 'see' them if there is NO WALL (False)
+        # N, E, S, W checks
         moves = [
-            ("N", cx, cy - 1, current_cell.north),
-            ("E", cx + 1, cy, current_cell.east),
-            ("S", cx, cy + 1, current_cell.south),
-            ("W", cx - 1, cy, current_cell.west),
+            (cx, cy - 1, current_cell.north),
+            (cx + 1, cy, current_cell.east),
+            (cx, cy + 1, current_cell.south),
+            (cx - 1, cy, current_cell.west),
         ]
 
-        for _, nx, ny, wall_exists in moves:
-            # Logic: Can we step here?
+        for nx, ny, wall_exists in moves:
             if not wall_exists and maze.is_in_bounds(nx, ny) and (nx, ny) not in visited:
-                # Page 9: We can't enter the 42 pattern (it's blocked)
                 if not maze.is_pattern_cell(nx, ny):
                     visited.add((nx, ny))
                     came_from[(nx, ny)] = (cx, cy)
                     queue.append((nx, ny))
 
-    # 2. Reconstruct the path from Exit back to Entry
-     # No path exists (impossible in a perfect maze, but good to check)
+    if exit_ not in came_from:
+        print(f"[DEBUG] Solver failed: No path from {entry} to {exit_}")
+        return []
 
     path = []
-    current = exit_
-    while current is not None:
-        path.append(current)
-        current = came_from[current]
-    
-    path.reverse() # Start -> Exit
-    return path
+    curr = exit_
+    while curr is not None:
+        path.append(curr)
+        curr = came_from[curr]
+    return path[::-1]
 
 
 def path_to_directions(path: list[tuple[int, int]]) -> str:
