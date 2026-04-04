@@ -4,9 +4,9 @@ import sys
 import signal
 import random
 from typing import Optional
-from visual.config import load_config
-from visual.colors import rotate_wall_color
-from visual.logo import (
+from mazegen.visual.config import load_config
+from mazegen.visual.colors import rotate_wall_color
+from mazegen.visual.logo import (
     logo_fits,
     get_logo_cells,
     _LOGO_H,
@@ -15,10 +15,10 @@ from visual.logo import (
     _LOGO_GAP,
     _LOGO_S,
 )
-from visual.display import display_maze
-from visual.terminal import clear_maze_display, flush_input
-from visual.animation import animate_generation, animate_path
-from core.maze_gen import generate_maze, find_path, write_maze_file
+from mazegen.visual.display import display_maze
+from mazegen.visual.terminal import clear_maze_display, flush_input
+from mazegen.visual.animation import animate_generation, animate_path
+from mazegen.core.maze_gen import generate_maze, find_path, write_maze_file
 
 
 def display_menu() -> str:
