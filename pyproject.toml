@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mazegen-moboulir"
+name = "mazegen"
 version = "1.0.0"
 description = "A modular maze generator and solver for 42 School"
 authors = [{name = "Your Name", email = "your@email.com"}]

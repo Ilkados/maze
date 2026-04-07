@@ -19,6 +19,7 @@ def write_hex_file(maze, filename: str, entry: tuple[int, int], exit_: tuple[int
     with open(filename, "w", encoding="utf-8") as file:
         for line in lines:
             file.write(line + "\n")
+            
 def to_visual_grid(maze, entry, exit_, path=None) -> list[list[str]]:
     v_height = maze.height * 2 + 1
     v_width = maze.width * 2 + 1

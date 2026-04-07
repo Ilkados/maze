@@ -1,21 +1,5 @@
 """Logo pattern module for embedding the '42' pattern into the maze."""
 
-_DIGIT_4: list[list[int]] = [
-    [1, 0, 0],
-    [1, 0, 0],
-    [1, 1, 1],
-    [0, 0, 1],
-    [0, 0, 1],
-]
-
-_DIGIT_2: list[list[int]] = [
-    [1, 1, 1],
-    [0, 0, 1],
-    [1, 1, 1],
-    [1, 0, 0],
-    [1, 1, 1],
-]
-
 _LOGO_H: int = 5
 _LOGO_W4: int = 3
 _LOGO_W2: int = 3

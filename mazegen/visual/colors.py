@@ -4,8 +4,7 @@ RESET: str = "\033[0m"
 PATH: str = "\033[48;5;232m" + "  " + RESET
 BORDER: str = "  "
 
-# Change these numbers to change the colors:
-# 46 = Green, 196 = Red, 21 = Blue, 226 = Yellow, 232 = Black
+
 WALL_COLORS: list[tuple[str, str, str, str]] = [
     ("\033[48;5;22m",  "\033[48;5;121m",  "Green",  "Light Green"),
     ("\033[48;5;37m",  "\033[48;5;159m",  "Cyan",   "Light Cyan"),
@@ -44,7 +43,7 @@ def get_entry() -> str:
         A two-character string with background color for entry rendering.
     """
     
-    return WALL_COLORS[current_color_index][1] + "  " + RESET
+    return get_trace()
 
 
 def get_exit() -> str:

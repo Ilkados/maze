@@ -93,5 +93,7 @@ def write_maze_file(grid, path, entry, exit_, filename):
     if _active_maze is None: return
     start_xy = (entry[1] // 2, entry[0] // 2)
     end_xy = (exit_[1] // 2, exit_[0] // 2)
+    start_xy_t = (entry[1] , entry[0] )
+    end_xy_t = (exit_[1] , exit_[0] )
     _, path_str = _active_maze.solve(start_xy, end_xy)
-    _active_maze.write_output(filename, start_xy, end_xy, path_str)
+    _active_maze.write_output(filename, start_xy_t, end_xy_t, path_str)

@@ -125,14 +125,6 @@ def load_config(
     if not (0 <= entry_col < cols_raw and 0 <= entry_row < rows_raw):
         _err(f"ENTRY={entry_col},{entry_row} is out of bounds.")
         return None
-    ##if not (
-    ##    entry_row == 0
-    ##    or entry_row == rows_raw - 1
-    ##    or entry_col == 0
-    ##    or entry_col == cols_raw - 1
-    ##):
-    ##    _err(f"ENTRY={entry_col},{entry_row} must be on the border.")
-    ##    return None
 
     exit_parts = raw["EXIT"].split(",")
     if (
@@ -151,14 +143,6 @@ def load_config(
     if not (0 <= exit_col < cols_raw and 0 <= exit_row < rows_raw):
         _err(f"EXIT={exit_col},{exit_row} is out of bounds.")
         return None
-   #if not (
-   #    exit_row == 0
-   #    or exit_row == rows_raw - 1
-   #    or exit_col == 0
-   #    or exit_col == cols_raw - 1
-   #):
-    #    _err(f"EXIT={exit_col},{exit_row} must be on the border.")
-    #    return None
 
     if (entry_col, entry_row) == (exit_col, exit_row):
         _err("ENTRY and EXIT must not be the same cell.")
