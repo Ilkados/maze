@@ -42,7 +42,7 @@ def get_entry() -> str:
     Returns:
         A two-character string with background color for entry rendering.
     """
-    
+
     return get_trace()
 
 

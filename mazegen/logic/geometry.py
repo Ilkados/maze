@@ -2,12 +2,22 @@
 mazegen/geometry.py: Your source code logic for grid math.
 """
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .maze import Maze
+
+
 def is_in_bounds(width: int, height: int, x: int, y: int) -> bool:
     """Check whether a coordinate is inside the maze."""
     return 0 <= x < width and 0 <= y < height
 
 
-def get_neighbors(maze, x: int, y: int) -> list[tuple[str, int, int]]:
+def get_neighbors(
+    maze: "Maze",
+    x: int,
+    y: int,
+) -> list[tuple[str, int, int]]:
     """Return all valid neighbors of the cell at (x, y)."""
     neighbors = []
 
@@ -26,7 +36,12 @@ def get_neighbors(maze, x: int, y: int) -> list[tuple[str, int, int]]:
     return neighbors
 
 
-def remove_wall(maze, x: int, y: int, direction: str) -> None:
+def remove_wall(
+    maze: "Maze",
+    x: int,
+    y: int,
+    direction: str,
+) -> None:
     """Your exact logic for removing walls with error handling."""
     current = maze.get_cell(x, y)
 

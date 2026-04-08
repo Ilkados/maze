@@ -1,8 +1,9 @@
-"""
-mazegen/validator.py: Validation helpers for maze rules.
-"""
+from typing import TYPE_CHECKING
 
 from .cell import Cell
+
+if TYPE_CHECKING:
+    from .maze import Maze
 
 
 def cells_connected_horizontally(left: Cell, right: Cell) -> bool:
@@ -15,16 +16,15 @@ def cells_connected_vertically(top: Cell, bottom: Cell) -> bool:
     return not top.south and not bottom.north
 
 
-def is_fully_open_3x3_block(maze, start_x: int, start_y: int) -> bool:
-    """
-    Return True if the 3x3 block starting at (start_x, start_y)
-    is a forbidden fully open 3x3 area.
-    """
-    # First collect the 9 cells
-    block = []
+def is_fully_open_3x3_block(
+    maze: "Maze",
+    start_x: int,
+    start_y: int,
+) -> bool:
+    block: list[list[Cell]] = []
 
     for dy in range(3):
-        row = []
+        block_row: list[Cell] = []
         for dx in range(3):
             x = start_x + dx
             y = start_y + dy
@@ -35,37 +35,42 @@ def is_fully_open_3x3_block(maze, start_x: int, start_y: int) -> bool:
             if maze.is_pattern_cell(x, y):
                 return False
 
-            row.append(maze.get_cell(x, y))
-        block.append(row)
+            block_row.append(maze.get_cell(x, y))
+        block.append(block_row)
 
-    # Check all horizontal inner connections
-    for row in range(3):
-        for col in range(2):
-            if not cells_connected_horizontally(block[row][col], block[row][col + 1]):
+    for row_idx in range(3):
+        for col_idx in range(2):
+            if not cells_connected_horizontally(
+                block[row_idx][col_idx],
+                block[row_idx][col_idx + 1],
+            ):
                 return False
 
-    # Check all vertical inner connections
-    for row in range(2):
-        for col in range(3):
-            if not cells_connected_vertically(block[row][col], block[row + 1][col]):
+    for row_idx in range(2):
+        for col_idx in range(3):
+            if not cells_connected_vertically(
+                block[row_idx][col_idx],
+                block[row_idx + 1][col_idx],
+            ):
                 return False
 
     return True
 
 
-def has_forbidden_3x3_area(maze) -> bool:
-    """Return True if the maze contains at least one forbidden 3x3 open area."""
+def has_forbidden_3x3_area(maze: "Maze") -> bool:
     for y in range(maze.height - 2):
         for x in range(maze.width - 2):
             if is_fully_open_3x3_block(maze, x, y):
                 return True
     return False
 
-def would_create_forbidden_3x3(maze, x: int, y: int, direction: str) -> bool:
-    """
-    Return True if opening the wall at (x, y) in the given direction
-    would create a forbidden 3x3 open area.
-    """
+
+def would_create_forbidden_3x3(
+    maze: "Maze",
+    x: int,
+    y: int,
+    direction: str,
+) -> bool:
     current = maze.get_cell(x, y)
 
     if direction == "N":
@@ -84,7 +89,7 @@ def would_create_forbidden_3x3(maze, x: int, y: int, direction: str) -> bool:
         neighbor.south = old_neighbor_wall
         return bad
 
-    elif direction == "E":
+    if direction == "E":
         nx, ny = x + 1, y
         neighbor = maze.get_cell(nx, ny)
 
@@ -100,7 +105,7 @@ def would_create_forbidden_3x3(maze, x: int, y: int, direction: str) -> bool:
         neighbor.west = old_neighbor_wall
         return bad
 
-    elif direction == "S":
+    if direction == "S":
         nx, ny = x, y + 1
         neighbor = maze.get_cell(nx, ny)
 
@@ -116,7 +121,7 @@ def would_create_forbidden_3x3(maze, x: int, y: int, direction: str) -> bool:
         neighbor.north = old_neighbor_wall
         return bad
 
-    elif direction == "W":
+    if direction == "W":
         nx, ny = x - 1, y
         neighbor = maze.get_cell(nx, ny)
 
@@ -132,5 +137,4 @@ def would_create_forbidden_3x3(maze, x: int, y: int, direction: str) -> bool:
         neighbor.east = old_neighbor_wall
         return bad
 
-    else:
-        raise ValueError(f"Invalid direction: {direction}")
+    raise ValueError(f"Invalid direction: {direction}")

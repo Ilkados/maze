@@ -10,10 +10,6 @@ from mazegen.visual.logo import (
     logo_fits,
     get_logo_cells,
     _LOGO_H,
-    _LOGO_W4,
-    _LOGO_W2,
-    _LOGO_GAP,
-    _LOGO_S,
 )
 from mazegen.visual.display import display_maze
 from mazegen.visual.terminal import clear_maze_display, flush_input
@@ -86,8 +82,8 @@ def run(config_path: str) -> None:
 
     logo_warning: Optional[str] = None
     if not logo_fits(rows, cols):
-        min_h: int = _LOGO_H * 2 + 2
-        min_w: int = (_LOGO_W4 + _LOGO_GAP + _LOGO_W2) * _LOGO_S + 2
+        min_h: int = _LOGO_H * 2 + 1
+        min_w: int = _LOGO_H * 2 + 1
         logo_warning = (
             f"\033[91m[ERROR] Maze too small for '42' logo "
             f"(need at least {min_w}x{min_h}, got {cols}x{rows}). "
@@ -97,7 +93,13 @@ def run(config_path: str) -> None:
     show_path: bool = False
 
     maze, carve_steps = generate_maze(
-        rows, cols, entry, exit_, perfect, seed, logo_cells
+        rows,
+        cols,
+        entry,
+        exit_,
+        perfect,
+        seed,
+        list(logo_cells),
     )
     path: list[tuple[int, int]] = find_path(maze, entry, exit_)
     write_maze_file(maze, path, entry, exit_, output_file)
@@ -128,13 +130,21 @@ def run(config_path: str) -> None:
         if choice == "1":
             new_seed: int = random.randint(0, 2 ** 32 - 1)
             maze, carve_steps = generate_maze(
-                rows, cols, entry, exit_, perfect, new_seed, logo_cells
+                rows,
+                cols,
+                entry,
+                exit_,
+                perfect,
+                new_seed,
+                list(logo_cells),
             )
             path = find_path(maze, entry, exit_)
             write_maze_file(maze, path, entry, exit_, output_file)
             clear_maze_display()
             animate_generation(
-                maze, carve_steps, logo_cells=logo_cells
+                maze,
+                carve_steps,
+                logo_cells=logo_cells,
             )
             animate_path(maze, path)
             show_path = True
