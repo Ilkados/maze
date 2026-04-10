@@ -69,7 +69,7 @@ def find_path(
 ) -> list[tuple[int, int]]:
     if _active_maze is None:
         return []
-
+    
     start_xy = (entry[1] // 2, entry[0] // 2)
     end_xy = (exit_[1] // 2, exit_[0] // 2)
 
@@ -114,6 +114,15 @@ def write_maze_file(
     start_xy = (entry[1] // 2, entry[0] // 2)
     end_xy = (exit_[1] // 2, exit_[0] // 2)
 
+    start_xy = (
+        max(0, min(start_xy[0], _active_maze.width - 1)),
+        max(0, min(start_xy[1], _active_maze.height - 1)),
+    )
+    end_xy = (
+        max(0, min(end_xy[0], _active_maze.width - 1)),
+        max(0, min(end_xy[1], _active_maze.height - 1)),
+    )
+    
     start_xy_t = (entry[1], entry[0])
     end_xy_t = (exit_[1], exit_[0])
 
