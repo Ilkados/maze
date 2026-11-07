@@ -1,23 +1,20 @@
-# *This project has been created as part of the A-Maze-ing project by <moboulir>, <asmounci>.*
+# A-Maze-ing
 
-## Description
+A Python terminal program that generates a maze, finds the shortest route from entry to exit, and lets you toggle the solution or generate a new layout.
 
-This project is a maze generator and solver written in Python.
+![Solved seed-42 maze with the route highlighted in light green](docs/maze-preview.svg)
 
-It creates a random maze, displays it, and can also find the shortest path from entry to exit. The program works with two coordinate systems:
+The preview uses the checked-in configuration with seed 42. The light green cells trace the route through the dark green walls.
 
-* **Logical grid** → used for maze generation (cells only) this part done by moboulir
-* **Visual grid** → used for display (cells + walls) and this part done by asmounci
+## Collaboration
 
-The maze can be **perfect** (no loops) or **imperfect** (with loops).
-
----
+This 42 project was created by **moboulir** and **asmounci**. Moboulir worked on the logical grid used to generate the maze. Asmounci worked on the visual grid used to display cells and walls.
 
 ## How it works
 
 The program uses:
 
-* **DFS (Depth-First Search)** → to generate the maze i choose it because s used to explore the maze by going as deep as possible along each path before backtracking, which is ideal for maze generation and pathfinding.
+* **DFS (Depth-First Search)** → to generate the maze by following a passage until it must backtrack.
 * **BFS (Breadth-First Search)** → to find the shortest path
 
 Steps:
@@ -34,8 +31,10 @@ Steps:
 
 ### Run the program
 
+From the repository root, use a Unix-like terminal and Python 3.10 or later. The viewer uses `termios` for keyboard input.
+
 ```bash
-python a_maze_ing.py config.txt
+python3 a_maze_ing.py config.txt
 ```
 
 ### Lint (code style check)
